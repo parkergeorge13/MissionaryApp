@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+  <div class="container mt-3">
+      <p><b>Hi, {{ user.username }}!</b> As you begin any new experience (like joining the Church or attending a new school), you feel excited about the opportunity—and nervous because you don’t know quite what to expect. Over time you learn to meet these challenges, and you grow in the process. </p>
+
+      <p>Missions are no different. Sometimes a mission feels like a wonderful spiritual adventure—or at least a challenge you can handle. You calmly move forward with faith, realizing that much of the nervousness or worry you experience is temporary. You take courage in knowing you will adjust with time, grow spiritually, and develop many new skills. Experiences you once feared become more manageable. You even come to cherish aspects of missionary life that once felt overwhelming. You rely on the Spirit, grow in confidence, and find joy in your service.</p>
+        
+        <p>At other times, however, you may face unexpected problems or experiences that are more difficult or unpleasant than you anticipated. You might wonder how you can succeed. Resources you once relied on to help you cope may not be available. Instead of feeling motivated to try, you might become anxious, irritable, exhausted, or frustrated. You might have physical symptoms like pain, upset stomach, sleeplessness, or illness. You could have trouble learning or connecting with people. You might feel discouraged or want to quit.</p>
+        
+        <p>Like gauges on a car’s dashboard that remind you to slow down, get gas, or check the engine, these symptoms are signals to remind you to slow down, fill up your spiritual “tank,” and look for new solutions...<a href="https://www.churchofjesuschrist.org/study/manual/resource-booklet-adjusting-to-missionary-life/understanding-stress?lang=eng#title4"> Read more</a></p>
+      <br>
+      <div class="row">
+        <div class="col-md-6">
+          <form method="post" action="{% url 'index' %}">
+              {% csrf_token %}
+              
+              <!-- <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-outline-success" onclick="selectQuadrant('Green')">Green</button>
+                  <button type="button" class="btn btn-outline-warning btn-yellow" onclick="selectQuadrant('Yellow')">Yellow</button>
+                  <button type="button" class="btn btn-outline-warning" onclick="selectQuadrant('Orange')">Orange</button>
+                  <button type="button" class="btn btn-outline-danger" onclick="selectQuadrant('Red')">Red</button>
+              </div> -->
+              <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+              <input type="hidden" id="selectedMood" name="mood" value="0"> <!-- Hidden field to store the selected mood -->
+              <br>
+              <br>
+              <!--<img src="https://www.churchofjesuschrist.org/imgs/690055f3893bedfb4c90346dcee16a0c51c9f513/full/100%2C/0/default" alt="Green Image" id="green-image" style="width: 120px; margin-left:60px;"> -->
+              <!--<img src="https://www.churchofjesuschrist.org/imgs/bf70c04e5279a4a586c6834cee2c952bf745773d/full/250%2C/0/default" alt="Yellow Image" id="yellow-image" style="width: 200px; margin-left:20px;display:none;"> -->
+              <!--<img src="https://www.churchofjesuschrist.org/imgs/3109635e35ba10bc25ac057f1d25e78ec6e04bea/full/250%2C/0/default" alt="Orange Image" id="orange-image" style="width: 200px; margin-left:15px;display:none;"> -->
+              <!--<img src="https://www.churchofjesuschrist.org/imgs/8dbb8c8a6a7fd43e51210ea3e7c8c1fd602be027/full/320%2C/0/default" alt="Red Image" id="red-image" style="width: 240px; margin-left:0px;display:none;">  -->  
+              
+          </form>
+      </div>
+      <div class="col-md-6">
+        <!-- <h3>Stress History</h3> -->
+        <ul class="list-group">
+          {% for entry in mood_history %}
+          <li
+            class="list-group-item"
+            style="background-color: {% if entry.mood_string == 'Green' %}green{% elif entry.mood_string == 'Yellow' %}yellow{% elif entry.mood_string == 'Orange' %}orange{% elif entry.mood_string == 'Red' %}red{% endif %}"
+          >
+            {{ entry.date }}: {{ entry.mood_string }}
+          </li>
+            {% endfor %}
+        </ul>
+      </div>
+      <script>
+        $(document).ready(function () {
+            // Hide all images except for the green image
+            $('#yellow-image, #orange-image, #red-image').hide();
+        });
+    
+        function selectQuadrant(mood) {
+            // Update the selected mood in the hidden field
+            let colors = ['Green','Yellow','Orange','Red'];
+            
+            $('#selectedMood').val(colors.indexOf(mood));
+    
+            // Hide all images
+            $('#green-image, #yellow-image, #orange-image, #red-image').hide();
+    
+            // Show the selected image
+            $('#' + mood.toLowerCase() + '-image').show();
+    
+            // Update button styles to show the active state
+            $('.btn').removeClass('active');
+            $('button:contains(' + mood + ')').addClass('active');
+        }
+      </script>
+    </div>
+    <br>
+    <!-- <div class="row">
+      <div class="d-grid gap-2 col-md-4" style="padding-bottom:10px;">
+        <a class="btn btn-primary" href="{% url "journal" %}" role="button" style="width:100%;">My Journal</a>
+      </div>
+      <div class="d-grid gap-2 col-md-4" style="padding-bottom:10px;">
+      <a class="btn btn-primary" href="#" role="button" style="width:100%;">Exercises</a>
+      </div>
+      <div class="d-grid gap-2 col-md-4" style="padding-bottom:10px;">
+      <a class="btn btn-primary" href="{% url "resources" %}" role="button" style="width:100%;">Additional Resources</a>
+      </div>
+    </div> -->
+  </div>
+  <br><br>
+  <footer class="bg-primary text-light text-center py-3">
+    <div class="container">
+      <p>Provo , Utah 84606 | Phone: 801-900-5699 | Email: royalbluesolutions@gmail.com</p>
+      <p>Copyright &copy; 2023 CALLED TO THRIVE</p>
+    </div>
+  </footer>
+
+{% endblock content %}

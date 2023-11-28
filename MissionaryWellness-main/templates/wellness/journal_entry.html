@@ -1,0 +1,93 @@
+{% extends "base.html" %} {% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-8 sidebar mt-3">
+      <ul class="list-group">
+        <div class="list-group-item text-center">
+          <h2>Recent Community Posts</h2>
+        </div>
+        {% for entry in entries %}
+        <li class="list-group-item">
+          <a href="{% url 'journal_entry_with_id' entry.id %}"
+            >{{ entry.title }} - {{ entry.created_at|date:"F d, Y" }}</a
+          >
+        </li>
+        {% endfor %}
+      </ul>
+      <div class="pagination mt-3 text-center" style="display: block">
+        <span class="step-links" style="display: block">
+          {% if entries.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ entries.previous_page_number }}">previous</a>
+          {% endif %}
+
+          <span class="current">
+            Page {{ entries.number }} of {{ entries.paginator.num_pages }}
+          </span>
+
+          {% if entries.has_next %}
+          <a href="?page={{ entries.next_page_number }}">next</a>
+          <a href="?page={{ entries.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+    
+    <!-- New Section -->
+    <div class="col-md-4">
+      <div class="card mt-3">
+        <div class="card-body">
+          <h2 class="card-title text-center">Create Your Own Post</h2>
+          <form
+            method="post"
+            action="{% if selected_entry %}{% url 'journal_entry_with_id' selected_entry.id %}{% else %}{% url 'journal' %}{% endif %}"
+            id="journalForm"
+          >
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="title">Subject</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                placeholder="Enter Subject"
+                value="{% if selected_entry %}{{ selected_entry.title }}{% endif %}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="content">Body</label>
+              <textarea
+                class="form-control"
+                id="content"
+                name="content"
+                rows="5"
+                placeholder="Text Here"
+              >
+{% if selected_entry %}{{ selected_entry.content }}{% endif %}</textarea
+              >
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="clearFields()"
+            >
+              Clear Content
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function clearFields() {
+    document.getElementById("title").value = "";
+    document.getElementById("content").value = "";
+  }
+</script>
+
+{% endblock %}

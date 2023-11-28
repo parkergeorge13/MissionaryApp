@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="jumbotron">
+            <h2 class="display-4">Welcome!</h2>
+            <p class="lead">Please <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Log In</a> or <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Register</a> to access additional features.</p>
+        </div>
+    </div>
+{% endblock %}
